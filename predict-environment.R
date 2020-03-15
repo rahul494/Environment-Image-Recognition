@@ -53,5 +53,6 @@ abline(0,1,lty="dashed")
 auc <- function(r) {
   sum((r$fpr) * diff(c(0,r$tpr)))
 }
+
 glmAuc <- auc(r)
 glmAuc
