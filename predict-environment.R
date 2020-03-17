@@ -9,6 +9,7 @@ trainFlag <- (runif(n) > 0.5)
 y <- as.numeric(pm$category == "outdoor-day")
 
 X <- matrix(NA, ncol=3, nrow=n)
+
 for (j in 1:n) {
   img <- readJPEG(paste0("C:\\Users\\Rahul\\Downloads\\columbiaImages\\",pm$name[j]))
   X[j,] <- apply(img,3,median)
