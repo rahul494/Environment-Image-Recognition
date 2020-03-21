@@ -10,10 +10,6 @@ library(jpeg)
 pm <- read.csv("C:\\Users\\Rahul\\Downloads\\photoMetaData.csv")
 n <- nrow(pm)
 
-trainFlag <- (runif(n) > 0.5) # generate 800 uniform numbers
-
-y <- as.numeric(pm$category == "outdoor-day")
-
 X <- matrix(NA, ncol = 3, nrow = n)
 for (j in 1:n) {
   img <-
