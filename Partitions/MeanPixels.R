@@ -12,8 +12,7 @@ n <- nrow(pm)
 
 X <- matrix(NA, ncol = 3, nrow = n)
 for (j in 1:n) {
-  img <-
-    readJPEG(paste0("C:\\Users\\Rahul\\Downloads\\columbiaImages\\", pm$name[j]))
+  img <- readJPEG(paste0("C:\\Users\\Rahul\\Downloads\\columbiaImages\\", pm$name[j]))
   X[j, ] <- apply(img, 3, mean)
   print(sprintf("%03d / %03d", j, n))
 }
