@@ -1,7 +1,7 @@
 #######################################################################
 ## Project: Image Processing Methods for Environment Classification
 ## Script purpose: Analyze and Summarize photos via 3x3 median median grid
-## Date: 2020-03-22
+## Date: 2020-03-23
 ## Author: Rahul Sharma
 #######################################################################
 
