@@ -1,6 +1,6 @@
 #######################################################################
 ## Project: Image Processing Methods for Environment Classification
-## Script purpose: Analyze and Summarize photos via 3x3 median median grid
+## Script purpose: Analyze and Summarize photos via 3x3 median grid
 ## Date: 2020-03-23
 ## Author: Rahul Sharma
 #######################################################################
@@ -13,7 +13,6 @@ gallery.size <- nrow(pm)
 # We use 27 predictors because 9 predictors come from each rgb dimension, 
 # taken from the partitioned 3x3 matrix created.
 X <- matrix(NA, ncol = 27, nrow = gallery.size)
-
 
 # M   One diminsional matrix as input
 # r   Let r denote the maximum number of columns outputted by the split matrix
