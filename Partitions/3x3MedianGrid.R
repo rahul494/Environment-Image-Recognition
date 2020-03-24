@@ -10,6 +10,8 @@ library(jpeg)
 pm <- read.csv("C:\\Users\\Rahul\\Downloads\\photoMetaData.csv")
 gallery.size <- nrow(pm)
 
+# We use 27 predictors because 9 predictors come from each rgb dimension, 
+# taken from the partitioned 3x3 matrix created.
 X <- matrix(NA, ncol = 27, nrow = gallery.size)
 
 
@@ -38,7 +40,7 @@ mat_split <- function(M, r, c) {
 for (k in 1:gallery.size) {
   img <- readJPEG(paste0("C:\\Users\\Rahul\\Downloads\\columbiaImages\\", pm$name[k]))
   
-  # iterate over the 3 rgb values, represented as the 3 dimensions in the readJPEG output
+  # Iterate over the 3 rgb values, represented as the 3 dimensions in the readJPEG output
   for (i in 1:3) {
     X[k, (1 + 9 * (i - 1))] <-
       median(mat_split(img[, , i], round(dim(img[, , i])[1] / 3), dim(img[, , i])[2])[, , 1][, 1:3])
