@@ -1,6 +1,9 @@
-# Convolutional Neural Networks
-
-# Load packages
+#######################################################################
+## Project: Image Processing Methods for Environment Classification
+## Script purpose: Analyze and classify photos via Convolutional Neural Network
+## Date: 2020-03-28
+## Author: Rahul Sharma
+#######################################################################
 library(keras)
 library(EBImage)
 
@@ -12,10 +15,8 @@ test <- list()
 for(i in 1:100) test[[i]] <- readImage(paste0("C:\\Users\\Rahul\\Downloads\\columbiaImages\\",pm$name[(i+700)]))
   
 # Resize & combine
-str(train)
 for (i in 1:700) {train[[i]] <- resize(train[[i]], 100, 100)}
 for (i in 1:100) {test[[i]] <- resize(test[[i]], 100, 100)}
-
 train <- combine(train)
 test <- combine(test)
 
@@ -26,8 +27,6 @@ test <- aperm(test, c(4, 1, 2, 3))
 # Response
 trainy <- as.numeric(pm$category == "outdoor-day")[1:700]
 testy <- as.numeric(pm$category == "outdoor-day")[701:800]
-
-# One hot encoding
 trainLabels <- to_categorical(trainy)
 testLabels <- to_categorical(testy)
 
