@@ -4,83 +4,88 @@
 ## Date: 2020-03-28
 ## Author: Rahul Sharma
 #######################################################################
+
 library(keras)
 library(EBImage)
 
-# Read Images
-train <- list()
-for(i in 1:700) train[[i]] <- readImage(paste0("C:\\Users\\Rahul\\Downloads\\columbiaImages\\",pm$name[i]))
+# Read metadata
+pm <- read.csv("C:\\Users\\Rahul\\Downloads\\photoMetaData.csv")
+y <- as.numeric(pm$category == "outdoor-day")
 
-test <- list()
-for(i in 1:100) test[[i]] <- readImage(paste0("C:\\Users\\Rahul\\Downloads\\columbiaImages\\",pm$name[(i+700)]))
-  
-# Resize & combine
-for (i in 1:700) {train[[i]] <- resize(train[[i]], 100, 100)}
-for (i in 1:100) {test[[i]] <- resize(test[[i]], 100, 100)}
-train <- combine(train)
-test <- combine(test)
+# Read Images
+pics <- list()
+for (i in 1:800){
+  pics[[i]] <- readImage(paste0("C:\\Users\\Rahul\\Downloads\\columbiaImages\\", pm$name[i]))
+  pics[[i]] <- resize(pics[[i]], 256, 256)
+}
+
+train_index <- sample(1:length(pics), 0.8 * length(pics))
+test_index <- setdiff(1:length(pics), train_index)
+
+
+x.train <- pics[c(train_index)]
+y.train <- pics[-c(train_index)]
+
+x.test <- pics[c(test_index)]
+y.test <- pics[-c(test_index)]
+
+x.train <- combine(x.train)
+x.test <- combine(x.test)
 
 # Reorder dimension
-train <- aperm(train, c(4, 1, 2, 3))
-test <- aperm(test, c(4, 1, 2, 3))
+x.train <- aperm(x.train, c(4, 1, 2, 3))
+x.test <- aperm(x.test, c(4, 1, 2, 3))
 
 # Response
-trainy <- as.numeric(pm$category == "outdoor-day")[1:700]
-testy <- as.numeric(pm$category == "outdoor-day")[701:800]
-trainLabels <- to_categorical(trainy)
-testLabels <- to_categorical(testy)
+cat.train <- to_categorical(as.numeric(pm$category == "outdoor-day")[c(train_index)])
+cat.test <- to_categorical(as.numeric(pm$category == "outdoor-day")[c(test_index)])
+ynew <- as.numeric(pm$category == "outdoor-day")[-c(test_index)]
 
-# Model
-model <- keras_model_sequential()
-
-model %>%
-  layer_conv_2d(filters = 16, 
+#Model
+model <- keras_model_sequential() %>%
+  layer_conv_2d(filters = 16,
                 kernel_size = c(3,3),
                 activation = 'relu',
-                input_shape = c(100, 100, 3)) %>%
+                input_shape = c(128,128,3)) %>%
   layer_conv_2d(filters = 16,
-      kernel_size = c(3,3),
-      activation = 'relu') %>%
-  layer_max_pooling_2d(pool_size = c(2,2)) %>%
-  layer_dropout(rate = 0.25) %>%
+                kernel_size = c(3,3),
+                activation = 'relu') %>% 
+  layer_max_pooling_2d(pool_size = c(2, 2)) %>% 
   layer_conv_2d(filters = 32,
                 kernel_size = c(3,3),
-                activation = 'relu') %>%
+                activation = 'relu') %>% 
   layer_conv_2d(filters = 32,
                 kernel_size = c(3,3),
-                activation = 'relu') %>%
-  layer_max_pooling_2d(pool_size = c(2,2)) %>%
-  layer_conv_2d(filters = 64,
-                kernel_size = c(3,3),
-                activation = 'relu') %>%
-  layer_conv_2d(filters = 64,
-                kernel_size = c(3,3),
-                activation = 'relu') %>%
-  layer_max_pooling_2d(pool_size = c(2,2)) %>%
-  layer_dropout(rate = 0.25) %>%
-  layer_flatten() %>%
-  layer_dense(units = 256, activation = 'relu') %>%
-  layer_dropout(rate=0.25) %>%
-  layer_dense(units = 2, activation = 'softmax')
-  
-  model %>% compile(
-    loss = loss_categorical_crossentropy,
-    optimizer = optimizer_adadelta(),
-    metrics = c('accuracy')
-  )
+                activation = 'relu') %>% 
+  layer_max_pooling_2d(pool_size = c(2, 2)) %>% 
+  layer_dropout(rate = 0.25) %>% 
+  layer_flatten() %>% 
+  layer_dense(units = 10,
+              activation = 'relu') %>% 
+  layer_dropout(rate = 0.5) %>% 
+  layer_dense(units = num_classes,
+              activation = 'softmax')
+
+model %>% compile(
+  loss = loss_categorical_crossentropy,
+  optimizer = optimizer_adadelta(),
+  metrics = c('accuracy')
+)
 
 batch_size <- 64
-epochs <- 32
+epochs <- 16
 
 # Train model
 model %>% fit(
-  train, trainLabels,
+  x.train,
+  cat.train,
   batch_size = batch_size,
   epochs = epochs,
   validation_split = 0.2
 )
 
-# Evaluation & Prediction - train data
-model %>% evaluate(train, trainLabels)
-pred <- model %>% predict_classes(train)
-table(Predicted = pred, Actual = trainy)
+score <- model %>% evaluate(x.test,cat.test)
+
+cat('Test loss: ', score$loss, "\n")
+
+cat('Test accuracy: ', score$acc, "\n")
