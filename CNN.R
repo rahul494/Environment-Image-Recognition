@@ -39,7 +39,6 @@ x.test <- aperm(x.test, c(4, 1, 2, 3))
 # Response
 cat.train <- to_categorical(as.numeric(pm$category == "outdoor-day")[c(train_index)])
 cat.test <- to_categorical(as.numeric(pm$category == "outdoor-day")[c(test_index)])
-ynew <- as.numeric(pm$category == "outdoor-day")[-c(test_index)]
 
 #Model
 model <- keras_model_sequential() %>%
