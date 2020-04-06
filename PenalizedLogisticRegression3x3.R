@@ -18,10 +18,9 @@ median.3x3 <- median.3x3[-c(na.rows), ]
 y <- as.numeric(pm$category == "outdoor-day")
 y <- y[-c(na.rows)]
 
+# repeat cross-validation 10 times
 sum <- 0
 rep <- 10
-
-# repeat cross-validation 10 times
 for(i in 1:rep){
   trainFlag <- (runif(nrow(median.3x3)) > 0.5)
   cvfit = cv.glmnet(data.matrix(median.3x3), y, family = "binomial", type.measure = "class", alpha = 1, subset = trainFlag )
