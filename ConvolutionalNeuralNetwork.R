@@ -16,7 +16,7 @@ y <- as.numeric(pm$category == "outdoor-day")
 pics <- list()
 for (i in 1:800){
   pics[[i]] <- readImage(paste0("C:\\Users\\Rahul\\Downloads\\columbiaImages\\", pm$name[i]))
-  pics[[i]] <- resize(pics[[i]], 256, 256)
+  pics[[i]] <- resize(pics[[i]], 128, 128)
 }
 
 train_index <- sample(1:length(pics), 0.8 * length(pics))
@@ -62,7 +62,7 @@ model <- keras_model_sequential() %>%
   layer_dense(units = 10,
               activation = 'relu') %>% 
   layer_dropout(rate = 0.5) %>% 
-  layer_dense(units = num_classes,
+  layer_dense(units = 2,
               activation = 'softmax')
 
 model %>% compile(
@@ -83,8 +83,7 @@ model %>% fit(
   validation_split = 0.2
 )
 
+# Determine our accuracy on test data
 score <- model %>% evaluate(x.test,cat.test)
-
 cat('Test loss: ', score$loss, "\n")
-
 cat('Test accuracy: ', score$acc, "\n")
