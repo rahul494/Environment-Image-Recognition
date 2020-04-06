@@ -22,4 +22,4 @@ for(i in 1:rep){
   sum <- sum + mean((as.numeric(pred > 0.5) == y)[!trainFlag])
 }
 
-print(sprintf("Our accuracy is: %03d ", sum/rep))
+print(sprintf("Our accuracy is: %03f ", sum/rep))
