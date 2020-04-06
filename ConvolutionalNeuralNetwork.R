@@ -19,24 +19,21 @@ for (i in 1:800){
   pics[[i]] <- resize(pics[[i]], 128, 128)
 }
 
+# Split indexes such that 80% of the data goes towards training, and remaining pictures for test 
 train_index <- sample(1:length(pics), 0.8 * length(pics))
 test_index <- setdiff(1:length(pics), train_index)
 
-
+# Split our picture data into test/train sets
 x.train <- pics[c(train_index)]
-y.train <- pics[-c(train_index)]
-
 x.test <- pics[c(test_index)]
-y.test <- pics[-c(test_index)]
-
 x.train <- combine(x.train)
 x.test <- combine(x.test)
 
-# Reorder dimension
+# Reorder dimensions
 x.train <- aperm(x.train, c(4, 1, 2, 3))
 x.test <- aperm(x.test, c(4, 1, 2, 3))
 
-# Response
+# Create our reponse variables
 cat.train <- to_categorical(as.numeric(pm$category == "outdoor-day")[c(train_index)])
 cat.test <- to_categorical(as.numeric(pm$category == "outdoor-day")[c(test_index)])
 
