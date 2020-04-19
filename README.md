@@ -14,7 +14,7 @@ Models Scripts:
 
 Pixel Summarization/Partition Scripts
 
-* 3x3MeanGrid.R
-* 3x3MedianGrid.R
-* MeanPixels.R
-* MedianPixels.R
+* Partitions/3x3MeanGrid.R
+* Partitions/3x3MedianGrid.R
+* Partitions/MeanPixels.R
+* Partitions/MedianPixels.R
