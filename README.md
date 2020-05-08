@@ -5,6 +5,9 @@ For further details of this project, see [report](Documents/Image%20Recognition%
 
 Dataset: Photos were taken from www.ee.columbia.edu/ln/dvmm/trustfoto
 
+## How to run
+wip
+
 Models Scripts:
 
 * SupportVectorMachine.R
