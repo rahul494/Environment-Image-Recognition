@@ -3,7 +3,7 @@ Implements various machine learning models to predict whether the image was take
 
 For further details of this project, see [report](Documents/Image%20Recognition%20Report.pdf) .
 
-Dataset: Photos were taken from www.ee.columbia.edu/ln/dvmm/trustfoto
+Dataset: Photos were taken from http://www.ee.columbia.edu/ln/dvmm/downloads/PIM_PRCG_dataset/
 
 ## How to run
 wip
